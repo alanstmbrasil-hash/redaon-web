@@ -1,308 +1,146 @@
 <!DOCTYPE html>
-
-<html class="dark" lang="pt-BR"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #10131a;
-        }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .glass-card {
-            background: rgba(25, 28, 34, 0.8);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .glass-morphism {
-            background: rgba(29, 32, 38, 0.6);
-            backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #32353c;
-            border-radius: 10px;
-        }
-        
-        /* Mobile Toggle State */
-        #sidebar-toggle:checked ~ aside {
-            transform: translateX(0);
-        }
-        #sidebar-toggle:checked ~ .content-overlay {
-            display: block;
-        }
+<html class="dark" lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #10131a; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-card { background: rgba(25, 28, 34, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #32353c; border-radius: 10px; }
+        #sidebar-toggle:checked ~ aside { transform: translateX(0); }
+        #sidebar-toggle:checked ~ .content-overlay { display: block; }
     </style>
-<script id="tailwind-config">
+    <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
                     colors: {
-                        "on-primary-fixed": "#160066",
-                        "on-error-container": "#ffdad6",
-                        "on-secondary": "#003737",
-                        "inverse-on-surface": "#2e3037",
-                        "secondary-fixed": "#56f9f9",
-                        "surface-container": "#1d2026",
-                        "tertiary-container": "#906c00",
-                        "tertiary": "#fabd00",
-                        "surface-container-lowest": "#0b0e14",
-                        "surface-container-low": "#191c22",
-                        "on-tertiary-fixed-variant": "#5b4300",
-                        "background": "#10131a",
-                        "primary-fixed-dim": "#c6bfff",
-                        "outline-variant": "#474554",
-                        "on-surface-variant": "#c8c4d7",
-                        "on-primary-fixed-variant": "#4029ba",
-                        "primary-container": "#6c5ce7",
-                        "surface-tint": "#c6bfff",
-                        "on-primary": "#2900a0",
-                        "on-primary-container": "#faf6ff",
-                        "inverse-surface": "#e1e2eb",
-                        "on-error": "#690005",
-                        "on-surface": "#e1e2eb",
-                        "secondary-fixed-dim": "#26dcdd",
-                        "surface-container-highest": "#32353c",
-                        "tertiary-fixed-dim": "#fabd00",
-                        "on-tertiary-fixed": "#261a00",
                         "primary": "#c6bfff",
-                        "outline": "#928ea0",
-                        "on-secondary-container": "#005455",
-                        "on-background": "#e1e2eb",
-                        "surface-bright": "#363940",
-                        "error-container": "#93000a",
-                        "surface-dim": "#10131a",
-                        "surface-variant": "#32353c",
-                        "on-secondary-fixed": "#002020",
-                        "error": "#ffb4ab",
-                        "surface-container-high": "#272a31",
-                        "primary-fixed": "#e4dfff",
-                        "on-tertiary-container": "#fff6ec",
                         "secondary": "#45edee",
-                        "on-tertiary": "#3f2e00",
-                        "on-secondary-fixed-variant": "#004f50",
-                        "secondary-container": "#00d0d1",
-                        "tertiary-fixed": "#ffdf9e",
-                        "surface": "#10131a",
-                        "inverse-primary": "#5847d2"
-                    },
-                    fontFamily: {
-                        "headline": ["Inter"],
-                        "body": ["Inter"],
-                        "label": ["Inter"]
-                    },
-                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
-                },
-            },
+                        "tertiary": "#fabd00",
+                        "background": "#10131a",
+                        "surface-container": "#1d2026",
+                        "surface-container-lowest": "#0b0e14",
+                        "on-surface": "#e1e2eb",
+                        "on-surface-variant": "#c8c4d7",
+                        "outline-variant": "#474554"
+                    }
+                }
+            }
         }
     </script>
 </head>
 <body class="bg-background text-on-surface antialiased overflow-x-hidden">
-<!-- Luminous Mesh Background Elements -->
-<div class="fixed top-0 left-0 w-full h-full pointer-events-none z-0">
-<div class="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary/5 rounded-full blur-[120px]"></div>
-<div class="absolute bottom-[-10%] left-[20%] w-[40%] h-[40%] bg-secondary/5 rounded-full blur-[120px]"></div>
-</div>
-<!-- Hidden Toggle for Mobile Sidebar -->
-<input class="hidden peer" id="sidebar-toggle" type="checkbox"/>
-<label class="content-overlay fixed inset-0 bg-black/60 z-[45] hidden transition-opacity lg:hidden" for="sidebar-toggle"></label>
-<div class="flex h-screen overflow-hidden relative z-10">
-<!-- SideNavBar Component (Fixed 256px width) -->
-<aside class="fixed left-0 top-0 h-full w-64 bg-[#10131a] border-r border-outline-variant/10 flex flex-col py-6 px-4 z-50 transition-transform duration-300 -translate-x-full lg:translate-x-0 shadow-[0px_24px_48px_-12px_rgba(108,92,231,0.12)]">
-<!-- Brand Header -->
-<div class="flex items-center px-2 mb-10">
-<div class="flex items-baseline italic font-bold">
-<span class="text-3xl font-black text-white tracking-tighter">Reda</span>
-<span class="text-3xl font-black text-[#45EDEE] tracking-tighter">ON</span>
-</div>
-</div>
-<!-- Navigation Links -->
-<nav class="flex-1 space-y-2 overflow-y-auto custom-scrollbar">
-<!-- Início -->
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#C8C4D7] hover:text-[#E1E2EB] hover:bg-[#1d2026] transition-all duration-300 active:scale-95 transform" href="#">
-<span class="material-symbols-outlined">home</span>
-<span class="font-medium text-sm">Início</span>
-</a>
-<!-- Nova Redação (ACTIVE STATE) -->
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#1d2026] text-[#45EDEE] border-r-4 border-[#45EDEE] transition-all duration-300 active:scale-95 transform" href="#">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
-<span class="font-medium text-sm">Nova Redação</span>
-</a>
-<!-- Temas -->
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#C8C4D7] hover:text-[#E1E2EB] hover:bg-[#1d2026] transition-all duration-300 active:scale-95 transform" href="#">
-<span class="material-symbols-outlined">description</span>
-<span class="font-medium text-sm">Temas</span>
-</a>
-<!-- Minhas Redações -->
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#C8C4D7] hover:text-[#E1E2EB] hover:bg-[#1d2026] transition-all duration-300 active:scale-95 transform" href="#">
-<span class="material-symbols-outlined">edit_note</span>
-<span class="font-medium text-sm">Minhas Redações</span>
-</a>
-<!-- Evolução -->
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#C8C4D7] hover:text-[#E1E2EB] hover:bg-[#1d2026] transition-all duration-300 active:scale-95 transform" href="#">
-<span class="material-symbols-outlined">trending_up</span>
-<span class="font-medium text-sm">Evolução</span>
-</a>
-<!-- Plano de Estudo -->
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#C8C4D7] hover:text-[#E1E2EB] hover:bg-[#1d2026] transition-all duration-300 active:scale-95 transform" href="#">
-<span class="material-symbols-outlined">menu_book</span>
-<span class="font-medium text-sm">Plano de Estudo</span>
-</a>
-<!-- Ranking -->
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#C8C4D7] hover:text-[#E1E2EB] hover:bg-[#1d2026] transition-all duration-300 active:scale-95 transform" href="#">
-<span class="material-symbols-outlined">leaderboard</span>
-<span class="font-medium text-sm">Ranking</span>
-</a>
-<!-- Configurações -->
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#C8C4D7] hover:text-[#E1E2EB] hover:bg-[#1d2026] transition-all duration-300 active:scale-95 transform" href="#">
-<span class="material-symbols-outlined">settings</span>
-<span class="font-medium text-sm">Configurações</span>
-</a>
-</nav>
-<!-- Footer Profile -->
-<div class="mt-auto pt-6 border-t border-outline-variant/10">
-<div class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-surface-container transition-colors cursor-pointer group">
-<img alt="Alan Alves Profile Picture" class="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMp63C69DfjS6_sdQxZxZhmL_jtIgMrfgNWeUHB1L2JJq3jrwGhBpeEL-onKTCGPk4J8Hg1Wr8dQBQjzD8NXxLSI_-cmi0a_nY4-vIhkG76gQQG49Wamj5_sGj17cJevQtmM_aqnPOezlFfGIiavVP1qkuCcG8VnfOOowL40czpVFN7_O9oxo6p0s-kZuWbwO43GXA3jVPYi5Oj_1KSzOsqCTvu7YlNuIiuADJSmjCQoGw5zWvtv9TO8X6T5ufmr3NheO7fda6r1xL"/>
-<div class="flex flex-col">
-<span class="text-sm font-semibold text-on-surface">Alan Alves</span>
-<span class="text-xs text-on-surface-variant">Estudante Premium</span>
-</div>
-</div>
-<!-- Logout Button Visible -->
-<a class="mt-2 flex items-center gap-3 px-4 py-3 rounded-xl text-red-400/70 hover:text-red-400 hover:bg-red-500/10 transition-all duration-300 group" href="#">
-<span class="material-symbols-outlined text-sm">logout</span>
-<span class="font-medium text-sm">Sair</span>
-</a>
-</div>
-</aside>
-<!-- Main Content Area Wrapper -->
-<div class="flex-1 flex flex-col h-full relative bg-surface-container-lowest">
-<!-- TopAppBar (STICKY) -->
-<header class="h-20 flex items-center justify-between px-6 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-40 border-b border-white/5 w-full lg:pl-64">
-<div class="flex items-center gap-4">
-<!-- Hamburger Menu Icon -->
-<button class="w-10 h-10 rounded-full flex items-center justify-center text-[#E1E2EB] hover:bg-white/10 transition-colors" onclick="document.getElementById('sidebar-toggle').click()">
-<span class="material-symbols-outlined">menu</span>
-</button>
-<!-- Sidebar Logo Replication for Topbar (Desktop) -->
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">edit_note</span>
-<h2 class="text-xl font-extrabold text-on-surface tracking-tight">Nova Redação</h2>
-</div>
-</div>
-<div class="flex items-center gap-4 lg:gap-6">
-<div class="hidden sm:flex items-center gap-2 bg-surface-container px-3 py-1.5 rounded-full">
-<span class="material-symbols-outlined text-tertiary text-lg" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
-<span class="text-xs font-bold text-on-surface">940 pts</span>
-</div>
-<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors relative">
-<span class="material-symbols-outlined">notifications</span>
-<span class="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full border-2 border-surface"></span>
-</button>
-</div>
-</header>
-<!-- Scrollable Content Canvas -->
-<main class="flex-1 overflow-y-auto p-6 lg:p-10 lg:ml-64 custom-scrollbar">
-<div class="max-w-7xl mx-auto space-y-6">
-<div class="flex justify-center">
-<input class="w-full max-w-4xl bg-transparent border-b border-white/10 py-2 text-xl font-bold outline-none focus:border-[#45edee] transition-colors text-white text-center" placeholder="Título da Redação: [Clique para digitar ou tema selecionado]" type="text"/>
-</div>
-<div class="grid grid-cols-12 gap-8 items-start">
-<div class="col-span-12 lg:col-span-8 bg-[#191c22] rounded-2xl border border-white/10 overflow-hidden flex flex-col min-h-[600px] shadow-2xl">
-<textarea id="textoRedacao" class="flex-1 bg-transparent p-8 text-lg outline-none resize-none text-white leading-relaxed" placeholder="Comece sua redação de elite aqui..."></textarea>
-<div class="p-6 bg-[#0b0e14] border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4">
-<div class="flex flex-row justify-between items-center w-full gap-4">
-<div class="flex gap-4 text-[9px] font-bold uppercase tracking-widest flex-shrink-0">
-<div class="text-[#45edee]">0 PALAVRAS</div>
-<div class="text-[#c8c4d7]">0 CARACTERES</div>
-</div>
-<div class="flex gap-4 items-center">
-<button class="px-6 py-2.5 rounded-xl border border-white/10 text-xs font-bold text-[#C8C4D7] hover:bg-white/5 transition-all whitespace-nowrap">Revisar</button>
-<button id="btnEnviar" class="px-8 py-2.5 bg-gradient-to-r from-[#6c5ce7] to-[#45edee] rounded-xl text-white text-xs font-bold shadow-lg hover:shadow-[#45edee]/20 transition-all">Enviar para Blanche</button>
-</div>
-</div>
-</div>
-</div>
-<div class="col-span-12 lg:col-span-4 space-y-4">
-<h3 class="text-sm font-bold text-white uppercase tracking-widest mb-2 px-1">Material de Apoio</h3>
-<div class="p-4 bg-[#1d2026] rounded-xl border-l-4 border-[#6c5ce7] transition-all hover:translate-x-1 cursor-pointer group">
-<h4 class="font-bold text-sm text-white group-hover:text-primary transition-colors">Legislação</h4>
-</div>
-<div class="p-4 bg-[#1d2026] rounded-xl border-l-4 border-[#45edee] transition-all hover:translate-x-1 cursor-pointer group">
-<h4 class="font-bold text-sm text-white group-hover:text-secondary transition-colors">História</h4>
-</div>
-<div class="p-4 bg-[#1d2026] rounded-xl border-l-4 border-[#fabd00] transition-all hover:translate-x-1 cursor-pointer group">
-<h4 class="font-bold text-sm text-white group-hover:text-tertiary transition-colors">Especialistas</h4>
-</div>
-<div class="p-4 bg-[#1d2026] rounded-xl border-l-4 border-[#4ade80] transition-all hover:translate-x-1 cursor-pointer group">
-<h4 class="font-bold text-sm text-white group-hover:text-green-400 transition-colors">Atualidades</h4>
-</div>
-<div class="bg-[#6c5ce7] p-6 rounded-2xl text-white shadow-xl relative overflow-hidden mt-6">
-<div class="relative z-10">
-<h4 class="font-bold mb-2 flex items-center gap-2">
-<span class="material-symbols-outlined text-lg">psychology</span>
-                                        Mentor IA PROfa Blanche
-                                    </h4>
-<p class="text-xs opacity-90 italic mb-4">"Alan, notei que sua argumentação pode ser fortalecida com um repertório sociocultural mais denso. No Plano Elite PRO, eu analiso cada linha em tempo real para você chegar aos 1000 pontos mais rápido!"</p>
-<div class="bg-white/10 p-3 rounded-lg text-[10px] border border-white/20 flex items-center gap-2">
-<span class="material-symbols-outlined text-[14px]">bolt</span>
-                                        📍 No Plano Elite PRO, eu analiso cada linha em tempo real!
-                                    </div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</main>
-</div>
-</div>
-<script type="module">
- // --- CONFIGURAÇÃO DA BLANCHE ---
-import { GoogleGenerativeAI } from "https://cdn.jsdelivr.net/npm/@google/generative-ai@0.1.0/+esm";
+    <div class="fixed top-0 left-0 w-full h-full pointer-events-none z-0">
+        <div class="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary/5 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] left-[20%] w-[40%] h-[40%] bg-secondary/5 rounded-full blur-[120px]"></div>
+    </div>
 
-const API_KEY = "AIzaSyAj9B5qLu6r14dkZbrsNHWYNb9oUadamMU"; // <--- COLOQUE SUA CHAVE AQUI DENTRO!
-const genAI = new GoogleGenerativeAI(API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }, { apiVersion: "v1" });
+    <input class="hidden peer" id="sidebar-toggle" type="checkbox"/>
+    <label class="content-overlay fixed inset-0 bg-black/60 z-[45] hidden transition-opacity lg:hidden" for="sidebar-toggle"></label>
+    
+    <div class="flex h-screen overflow-hidden relative z-10">
+        <aside class="fixed left-0 top-0 h-full w-64 bg-[#10131a] border-r border-outline-variant/10 flex flex-col py-6 px-4 z-50 transition-transform duration-300 -translate-x-full lg:translate-x-0 shadow-xl">
+            <div class="flex items-center px-2 mb-10">
+                <div class="flex items-baseline italic font-bold">
+                    <span class="text-3xl font-black text-white tracking-tighter">Reda</span>
+                    <span class="text-3xl font-black text-[#45EDEE] tracking-tighter">ON</span>
+                </div>
+            </div>
+            <nav class="flex-1 space-y-2 overflow-y-auto custom-scrollbar">
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#1d2026] text-[#45EDEE] border-r-4 border-[#45EDEE]" href="#">
+                    <span class="material-symbols-outlined">add_circle</span>
+                    <span class="font-medium text-sm">Nova Redação</span>
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#C8C4D7] hover:bg-[#1d2026]" href="#"><span class="material-symbols-outlined">home</span><span class="font-medium text-sm">Início</span></a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#C8C4D7] hover:bg-[#1d2026]" href="#"><span class="material-symbols-outlined">description</span><span class="font-medium text-sm">Temas</span></a>
+            </nav>
+            <div class="mt-auto pt-6 border-t border-outline-variant/10">
+                <div class="flex items-center gap-3 px-2 py-2 rounded-xl">
+                    <img alt="Alan Profile" class="w-10 h-10 rounded-full" src="https://ui-avatars.com/api/?name=Alan+Alves&background=6c5ce7&color=fff"/>
+                    <div class="flex flex-col">
+                        <span class="text-sm font-semibold text-on-surface">Alan Alves</span>
+                        <span class="text-xs text-on-surface-variant">Estudante Premium</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
 
-// --- LÓGICA DO BOTÃO ---
-document.addEventListener('DOMContentLoaded', () => {
-    const btn = document.getElementById('btnEnviar');
-    const input = document.getElementById('textoRedacao');
+        <div class="flex-1 flex flex-col h-full relative bg-surface-container-lowest">
+            <header class="h-20 flex items-center justify-between px-6 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-40 border-b border-white/5 lg:pl-64">
+                <div class="flex items-center gap-4">
+                    <button class="lg:hidden w-10 h-10 rounded-full flex items-center justify-center text-[#E1E2EB]" onclick="document.getElementById('sidebar-toggle').click()">
+                        <span class="material-symbols-outlined">menu</span>
+                    </button>
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-secondary">edit_note</span>
+                        <h2 class="text-xl font-extrabold text-on-surface">Nova Redação</h2>
+                    </div>
+                </div>
+            </header>
 
-    if (btn) {
-        btn.addEventListener('click', async () => {
-            const texto = input.value;
+            <main class="flex-1 overflow-y-auto p-6 lg:p-10 lg:ml-64 custom-scrollbar">
+                <div class="max-w-7xl mx-auto space-y-6">
+                    <div class="flex justify-center">
+                        <input class="w-full max-w-4xl bg-transparent border-b border-white/10 py-2 text-xl font-bold outline-none focus:border-[#45edee] text-white text-center" placeholder="Título da Redação" type="text"/>
+                    </div>
+                    <div class="grid grid-cols-12 gap-8 items-start">
+                        <div class="col-span-12 lg:col-span-8 bg-[#191c22] rounded-2xl border border-white/10 overflow-hidden flex flex-col min-h-[500px]">
+                            <textarea id="textoRedacao" class="flex-1 bg-transparent p-8 text-lg outline-none resize-none text-white leading-relaxed" placeholder="Comece sua redação de elite aqui..."></textarea>
+                            <div class="p-6 bg-[#0b0e14] border-t border-white/5 flex justify-end">
+                                <button id="btnEnviar" class="px-8 py-2.5 bg-gradient-to-r from-[#6c5ce7] to-[#45edee] rounded-xl text-white text-xs font-bold shadow-lg hover:scale-105 transition-all">Enviar para Blanche</button>
+                            </div>
+                        </div>
+                        <div class="col-span-12 lg:col-span-4 space-y-4">
+                            <div class="bg-[#6c5ce7] p-6 rounded-2xl text-white shadow-xl">
+                                <h4 class="font-bold mb-2 flex items-center gap-2"><span class="material-symbols-outlined">psychology</span> Mentor IA Profa Blanche</h4>
+                                <p class="text-xs opacity-90 italic">"Alan, estou pronta para corrigir sua redação. Escreva seu texto e clique no botão!"</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script type="module">
+        import { GoogleGenerativeAI } from "https://cdn.jsdelivr.net/npm/@google/generative-ai@0.1.0/+esm";
+
+        const API_KEY = "AIzaSyAj9B5qLu6r14dkZbrsNHWYNb9oUadamMU"; 
+        const genAI = new GoogleGenerativeAI(API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }, { apiVersion: "v1" });
+
+        document.getElementById('btnEnviar').addEventListener('click', async () => {
+            const btn = document.getElementById('btnEnviar');
+            const texto = document.getElementById('textoRedacao').value;
+
             if (!texto) {
-                alert("Por favor, escreva algo para a Blanche analisar!");
+                alert("Por favor, escreva sua redação antes de enviar!");
                 return;
             }
 
-            btn.innerText = "Blanche está analisando...";
+            btn.innerText = "Blanche analisando...";
             btn.disabled = true;
 
             try {
-                const prompt = "Você é a Profa Blanche, uma tutora de redação para o ENEM. Corrija o seguinte texto com um tom incentivador, mas rigoroso: " + texto;
+                const prompt = "Você é a Profa Blanche, uma tutora de redação rigorosa e incentivadora. Corrija o seguinte texto do aluno Alan: " + texto;
                 const result = await model.generateContent(prompt);
                 const response = await result.response;
                 alert(response.text());
             } catch (error) {
                 console.error(error);
-                alert("Erro na conexão: " + error.message);
+                alert("Blanche encontrou um problema técnico: " + error.message);
             } finally {
                 btn.innerText = "Enviar para Blanche";
                 btn.disabled = false;
             }
         });
-    }
-});
+    </script>
+</body>
+</html>
