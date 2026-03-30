@@ -268,30 +268,41 @@
 </div>
 </div>
 <script type="module">
-  import { GoogleGenerativeAI } from "https://cdn.jsdelivr.net/npm/@google/generative-ai@0.1.0/+esm";
+ // --- CONFIGURAÇÃO DA BLANCHE ---
+import { GoogleGenerativeAI } from "https://cdn.jsdelivr.net/npm/@google/generative-ai@0.1.0/+esm";
 
-  // 🔑 COLOQUE SUA CHAVE ABAIXO
-  const API_KEY = "AIzaSyAj9B5qLu6r14dkZbrsNHWYNb9oUadamMU"; 
-  
-  const genAI = new GoogleGenerativeAI(API_KEY);
-  console.log("Sistema RedaON Iniciado com a Mestra Blanche!");
-  document.getElementById('btnEnviar').addEventListener('click', async () => {
-    const texto = document.getElementById('textoRedacao').value;
-    // Linha 280 em diante:
-const btn = document.getElementById('btnEnviar');
-
-// 1. A CHAVE VAI AQUI (Linha 284 aprox.)
-const API_KEY = "AIzaSyAj9B5qLu6r14dkZbrsNHWYNb9oUadamMU"; 
-
-// 2. O MOTOR DA IA (Linha 287 aprox.)
+const API_KEY = "AIzaSyAj9B5qLu6r14dkZbrsNHWYNb9oUadamMU"; // <--- COLOQUE SUA CHAVE AQUI DENTRO!
 const genAI = new GoogleGenerativeAI(API_KEY);
-
-// 3. O SEGREDO DA VERSÃO V1 (Linha 290 aprox.)
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }, { apiVersion: "v1" });
 
-// 4. A FUNÇÃO QUE O BOTÃO CHAMA (Logo abaixo)
-btn.addEventListener('click', async () => {
-    const texto = document.getElementById('textoRedacao').value;    }
-  });
-</script>
-</body></html>
+// --- LÓGICA DO BOTÃO ---
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('btnEnviar');
+    const input = document.getElementById('textoRedacao');
+
+    if (btn) {
+        btn.addEventListener('click', async () => {
+            const texto = input.value;
+            if (!texto) {
+                alert("Por favor, escreva algo para a Blanche analisar!");
+                return;
+            }
+
+            btn.innerText = "Blanche está analisando...";
+            btn.disabled = true;
+
+            try {
+                const prompt = "Você é a Profa Blanche, uma tutora de redação para o ENEM. Corrija o seguinte texto com um tom incentivador, mas rigoroso: " + texto;
+                const result = await model.generateContent(prompt);
+                const response = await result.response;
+                alert(response.text());
+            } catch (error) {
+                console.error(error);
+                alert("Erro na conexão: " + error.message);
+            } finally {
+                btn.innerText = "Enviar para Blanche";
+                btn.disabled = false;
+            }
+        });
+    }
+});
