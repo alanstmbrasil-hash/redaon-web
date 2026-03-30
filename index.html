@@ -268,7 +268,7 @@
 </div>
 </div>
 <script type="module">
-  import { GoogleGenerativeAI } from "https://cdn.jsdelivr.net/npm/@google/generative-ai@0.12.0/+esm";
+  import { GoogleGenerativeAI } from "https://cdn.jsdelivr.net/npm/@google/generative-ai@0.1.0/+esm";
 
   // 🔑 COLOQUE SUA CHAVE ABAIXO
   const API_KEY = "AIzaSyAj9B5qLu6r14dkZbrsNHWYNb9oUadamMU"; 
@@ -284,9 +284,12 @@
     if (!texto) return alert("Talento, escreva sua redação antes de enviar!");
 
     btn.innerText = "Blanche está analisando...";
-    
-    try {
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+   // Linha 287 (Pode deixar um espaço ou comentário)
+const API_KEY = "AIzaSyAj9B5qLu6r14dkZbrsNHWYNb9oUadamMU"; // <--- COLOQUE SUA CHAVE AIza... AQUI!
+const genAI = new GoogleGenerativeAI(API_KEY);
+
+// Linha 291 (AQUI ESTÁ O SEGREDO!)
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }, { apiVersion: "v1" });
       const prompt = `Aja como a Profa. Blanche da RedaON. Corrija esta redação seguindo rigorosamente os critérios do ENEM. Use as insígnias de evolução baseadas na nota. Redação: ${texto}`;
       
       const result = await model.generateContent(prompt);
