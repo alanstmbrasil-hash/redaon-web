@@ -277,29 +277,21 @@
   console.log("Sistema RedaON Iniciado com a Mestra Blanche!");
   document.getElementById('btnEnviar').addEventListener('click', async () => {
     const texto = document.getElementById('textoRedacao').value;
-    const btn = document.getElementById('btnEnviar');
-    
-    console.log("Botão clicado! Texto capturado:", texto);
-    
-    if (!texto) return alert("Talento, escreva sua redação antes de enviar!");
+    // Linha 280 em diante:
+const btn = document.getElementById('btnEnviar');
 
-    btn.innerText = "Blanche está analisando...";
-          const API_KEY = "AIzaSyAj9B5qLu6r14dkZbrsNHWYNb9oUadamMU";
-  // --- INÍCIO DO AJUSTE ---
-const API_KEY = "SUA_CHAVE_AQUI_DENTRO"; 
+// 1. A CHAVE VAI AQUI (Linha 284 aprox.)
+const API_KEY = "AIzaSyAj9B5qLu6r14dkZbrsNHWYNb9oUadamMU"; 
+
+// 2. O MOTOR DA IA (Linha 287 aprox.)
 const genAI = new GoogleGenerativeAI(API_KEY);
+
+// 3. O SEGREDO DA VERSÃO V1 (Linha 290 aprox.)
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }, { apiVersion: "v1" });
-// --- FIM DO AJUSTE ---
-      const prompt = `Aja como a Profa. Blanche da RedaON. Corrija esta redação seguindo rigorosamente os critérios do ENEM. Use as insígnias de evolução baseadas na nota. Redação: ${texto}`;
-      
-      const result = await model.generateContent(prompt);
-      alert(result.response.text());
-    } catch (error) {
-      console.error("Erro na Blanche:", error);
-      alert("Houve um erro na conexão com a Mestra.");
-    } finally {
-      btn.innerText = "Enviar para Blanche";
-    }
+
+// 4. A FUNÇÃO QUE O BOTÃO CHAMA (Logo abaixo)
+btn.addEventListener('click', async () => {
+    const texto = document.getElementById('textoRedacao').value;    }
   });
 </script>
 </body></html>
