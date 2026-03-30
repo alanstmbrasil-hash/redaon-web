@@ -1,177 +1,497 @@
 <!DOCTYPE html>
 <html class="dark" lang="pt-BR">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #10131a; }
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nova Redação — RedaON</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #10131a;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(25, 28, 34, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .glass-morphism {
+            background: rgba(29, 32, 38, 0.6);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #32353c; border-radius: 10px; }
+
+        /* Mobile Toggle State */
         #sidebar-toggle:checked ~ aside { transform: translateX(0); }
         #sidebar-toggle:checked ~ .content-overlay { display: block; }
-    </style>
-    <script id="tailwind-config">
+
+        /* Painel de resultado da Blanche */
+        #painel-blanche {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(0,0,0,0.7);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        #painel-blanche.aberto { display: flex; }
+        .painel-interno {
+            background: #1d2026;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 1.25rem;
+            width: 100%;
+            max-width: 720px;
+            max-height: 88vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+        }
+        .painel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            flex-shrink: 0;
+        }
+        .painel-body {
+            overflow-y: auto;
+            padding: 1.5rem;
+            flex: 1;
+        }
+        .painel-body::-webkit-scrollbar { width: 6px; }
+        .painel-body::-webkit-scrollbar-thumb { background: #32353c; border-radius: 10px; }
+        .nota-total { text-align: center; margin-bottom: 1.5rem; }
+        .nota-numero {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6c5ce7, #45edee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+        .competencia-card {
+            background: #10131a;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+        .competencia-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+        .competencia-nome { font-size: 0.8rem; font-weight: 600; color: #c8c4d7; }
+        .competencia-nota { font-size: 0.8rem; font-weight: 700; color: #45edee; }
+        .barra-bg { background: #32353c; border-radius: 99px; height: 6px; width: 100%; }
+        .barra-fill { height: 6px; border-radius: 99px; background: linear-gradient(90deg, #6c5ce7, #45edee); transition: width 0.8s ease; }
+        .competencia-comentario { font-size: 0.75rem; color: #928ea0; margin-top: 0.5rem; line-height: 1.5; }
+        .secao-titulo { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #928ea0; margin: 1.25rem 0 0.5rem; }
+        .lista-item { display: flex; gap: 0.5rem; font-size: 0.8rem; color: #c8c4d7; margin-bottom: 0.4rem; line-height: 1.5; }
+        .lista-item-icon { flex-shrink: 0; margin-top: 1px; }
+        .comentario-geral {
+            background: rgba(108,92,231,0.1);
+            border: 1px solid rgba(108,92,231,0.25);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            font-size: 0.82rem;
+            color: #c8c4d7;
+            line-height: 1.6;
+            margin-top: 1rem;
+            font-style: italic;
+        }
+        .btn-fechar { background: none; border: none; color: #928ea0; cursor: pointer; padding: 0.25rem; border-radius: 0.5rem; display: flex; align-items: center; transition: color 0.2s; }
+        .btn-fechar:hover { color: #e1e2eb; }
+        .loading-blanche { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem; gap: 1rem; }
+        .loading-spinner { width: 40px; height: 40px; border: 3px solid rgba(108,92,231,0.2); border-top-color: #6c5ce7; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+<script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#c6bfff",
-                        "secondary": "#45edee",
-                        "tertiary": "#fabd00",
-                        "background": "#10131a",
+                        "on-primary-fixed": "#160066",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary": "#003737",
+                        "inverse-on-surface": "#2e3037",
+                        "secondary-fixed": "#56f9f9",
                         "surface-container": "#1d2026",
+                        "tertiary-container": "#906c00",
+                        "tertiary": "#fabd00",
                         "surface-container-lowest": "#0b0e14",
-                        "on-surface": "#e1e2eb",
+                        "surface-container-low": "#191c22",
+                        "on-tertiary-fixed-variant": "#5b4300",
+                        "background": "#10131a",
+                        "primary-fixed-dim": "#c6bfff",
+                        "outline-variant": "#474554",
                         "on-surface-variant": "#c8c4d7",
-                        "outline-variant": "#474554"
-                    }
-                }
-            }
+                        "on-primary-fixed-variant": "#4029ba",
+                        "primary-container": "#6c5ce7",
+                        "surface-tint": "#c6bfff",
+                        "on-primary": "#2900a0",
+                        "on-primary-container": "#faf6ff",
+                        "inverse-surface": "#e1e2eb",
+                        "on-error": "#690005",
+                        "on-surface": "#e1e2eb",
+                        "secondary-fixed-dim": "#26dcdd",
+                        "surface-container-highest": "#32353c",
+                        "tertiary-fixed-dim": "#fabd00",
+                        "on-tertiary-fixed": "#261a00",
+                        "primary": "#c6bfff",
+                        "outline": "#928ea0",
+                        "on-secondary-container": "#005455",
+                        "on-background": "#e1e2eb",
+                        "surface-bright": "#363940",
+                        "error-container": "#93000a",
+                        "surface-dim": "#10131a",
+                        "surface-variant": "#32353c",
+                        "on-secondary-fixed": "#002020",
+                        "error": "#ffb4ab",
+                        "surface-container-high": "#272a31",
+                        "primary-fixed": "#e4dfff",
+                        "on-tertiary-container": "#fff6ec",
+                        "secondary": "#45edee",
+                        "on-tertiary": "#3f2e00",
+                        "on-secondary-fixed-variant": "#004f50",
+                        "secondary-container": "#00d0d1",
+                        "tertiary-fixed": "#ffdf9e",
+                        "surface": "#10131a",
+                        "inverse-primary": "#5847d2"
+                    },
+                    fontFamily: { "headline": ["Inter"], "body": ["Inter"], "label": ["Inter"] },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
         }
-    </script>
+</script>
 </head>
 <body class="bg-background text-on-surface antialiased overflow-x-hidden">
-    <div class="fixed top-0 left-0 w-full h-full pointer-events-none z-0">
-        <div class="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary/5 rounded-full blur-[120px]"></div>
-        <div class="absolute bottom-[-10%] left-[20%] w-[40%] h-[40%] bg-secondary/5 rounded-full blur-[120px]"></div>
+
+<!-- ═══ PAINEL DE RESULTADO DA BLANCHE ═══ -->
+<div id="painel-blanche">
+    <div class="painel-interno">
+        <div class="painel-header">
+            <div style="display:flex;align-items:center;gap:0.6rem;">
+                <span class="material-symbols-outlined" style="color:#6c5ce7;font-size:1.3rem;">psychology</span>
+                <span style="font-weight:700;font-size:1rem;color:#e1e2eb;">Análise da Profa. Blanche</span>
+            </div>
+            <button class="btn-fechar" onclick="fecharPainel()">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="painel-body" id="painel-conteudo"></div>
     </div>
+</div>
 
-    <input class="hidden peer" id="sidebar-toggle" type="checkbox"/>
-    <label class="content-overlay fixed inset-0 bg-black/60 z-[45] hidden transition-opacity lg:hidden" for="sidebar-toggle"></label>
-    
-    <div class="flex h-screen overflow-hidden relative z-10">
-        <aside class="fixed left-0 top-0 h-full w-64 bg-[#10131a] border-r border-outline-variant/10 flex flex-col py-6 px-4 z-50 transition-transform duration-300 -translate-x-full lg:translate-x-0 shadow-xl">
-            <div class="flex items-center px-2 mb-10">
-                <div class="flex items-baseline italic font-bold">
-                    <span class="text-3xl font-black text-white tracking-tighter">Reda</span>
-                    <span class="text-3xl font-black text-[#45EDEE] tracking-tighter">ON</span>
-                </div>
-            </div>
-            <nav class="flex-1 space-y-2 overflow-y-auto custom-scrollbar">
-                <a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#1d2026] text-[#45EDEE] border-r-4 border-[#45EDEE]" href="#">
-                    <span class="material-symbols-outlined">add_circle</span>
-                    <span class="font-medium text-sm">Nova Redação</span>
-                </a>
-                <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#C8C4D7] hover:bg-[#1d2026]" href="#"><span class="material-symbols-outlined">home</span><span class="font-medium text-sm">Início</span></a>
-                <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#C8C4D7] hover:bg-[#1d2026]" href="#"><span class="material-symbols-outlined">edit_note</span><span class="font-medium text-sm">Minhas Redações</span></a>
-            </nav>
-            <div class="mt-auto pt-6 border-t border-outline-variant/10">
-                <div class="flex items-center gap-3 px-2 py-2 rounded-xl">
-                    <img alt="Alan Profile" class="w-10 h-10 rounded-full" src="https://ui-avatars.com/api/?name=Alan+Alves&background=6c5ce7&color=fff"/>
-                    <div class="flex flex-col text-left">
-                        <span class="text-sm font-semibold text-on-surface">Alan Alves</span>
-                        <span class="text-xs text-on-surface-variant">Estudante Premium</span>
-                    </div>
-                </div>
-            </div>
-        </aside>
+<!-- Luminous Mesh Background -->
+<div class="fixed top-0 left-0 w-full h-full pointer-events-none z-0">
+    <div class="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary/5 rounded-full blur-[120px]"></div>
+    <div class="absolute bottom-[-10%] left-[20%] w-[40%] h-[40%] bg-secondary/5 rounded-full blur-[120px]"></div>
+</div>
 
-        <div class="flex-1 flex flex-col h-full relative bg-surface-container-lowest">
-            <header class="h-20 flex items-center justify-between px-6 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-40 border-b border-white/5 lg:pl-64">
-                <div class="flex items-center gap-4">
-                    <button class="lg:hidden w-10 h-10 rounded-full flex items-center justify-center text-[#E1E2EB]" onclick="document.getElementById('sidebar-toggle').click()">
-                        <span class="material-symbols-outlined">menu</span>
-                    </button>
-                    <div class="flex items-center gap-2">
-                        <span class="material-symbols-outlined text-secondary">edit_note</span>
-                        <h2 class="text-xl font-extrabold text-on-surface">Nova Redação</h2>
-                    </div>
-                </div>
-                <div class="flex items-center gap-2 bg-surface-container px-3 py-1.5 rounded-full">
-                    <span class="material-symbols-outlined text-tertiary text-lg">workspace_premium</span>
-                    <span class="text-xs font-bold text-on-surface">940 pts</span>
-                </div>
-            </header>
+<!-- Mobile Sidebar Toggle -->
+<input class="hidden peer" id="sidebar-toggle" type="checkbox"/>
+<label class="content-overlay fixed inset-0 bg-black/60 z-[45] hidden transition-opacity lg:hidden" for="sidebar-toggle"></label>
 
-            <main class="flex-1 overflow-y-auto p-6 lg:p-10 lg:ml-64 custom-scrollbar">
-                <div class="max-w-7xl mx-auto space-y-6">
-                    <div class="flex justify-center">
-                        <input class="w-full max-w-4xl bg-transparent border-b border-white/10 py-2 text-xl font-bold outline-none focus:border-[#45edee] text-white text-center" placeholder="Título da Redação" type="text"/>
-                    </div>
-                    
-                    <div class="grid grid-cols-12 gap-8 items-start">
-                        <div class="col-span-12 lg:col-span-8 bg-[#191c22] rounded-2xl border border-white/10 overflow-hidden flex flex-col min-h-[550px] shadow-2xl">
-                            <textarea id="textoRedacao" class="flex-1 bg-transparent p-8 text-lg outline-none resize-none text-white leading-relaxed" placeholder="Comece sua redação de elite aqui..."></textarea>
-                            
-                            <div class="p-6 bg-[#0b0e14] border-t border-white/5 flex flex-row justify-between items-center gap-4">
-                                <div class="flex gap-4 text-[9px] font-bold uppercase tracking-widest text-[#c8c4d7]">
-                                    <div class="flex gap-1"><span id="wordCount" class="text-[#45edee]">0</span> PALAVRAS</div>
-                                    <div class="flex gap-1"><span id="charCount" class="text-[#45edee]">0</span> CARACTERES</div>
-                                </div>
-                                <div class="flex gap-4 items-center">
-                                    <button id="btnEnviar" class="px-8 py-2.5 bg-gradient-to-r from-[#6c5ce7] to-[#45edee] rounded-xl text-white text-xs font-bold shadow-lg hover:scale-105 transition-all">Enviar para Blanche</button>
-                                </div>
-                            </div>
-                        </div>
+<div class="flex h-screen overflow-hidden relative z-10">
 
-                        <div class="col-span-12 lg:col-span-4 space-y-4">
-                            <h3 class="text-sm font-bold text-white uppercase tracking-widest px-1">Material de Apoio</h3>
-                            <div class="p-4 bg-[#1d2026] rounded-xl border-l-4 border-[#6c5ce7] hover:translate-x-1 transition-all cursor-pointer"><h4 class="font-bold text-sm">Legislação</h4></div>
-                            <div class="p-4 bg-[#1d2026] rounded-xl border-l-4 border-[#45edee] hover:translate-x-1 transition-all cursor-pointer"><h4 class="font-bold text-sm">História</h4></div>
-                            
-                            <div class="bg-[#6c5ce7] p-6 rounded-2xl text-white shadow-xl mt-6">
-                                <h4 class="font-bold mb-2 flex items-center gap-2"><span class="material-symbols-outlined">psychology</span> Mentor IA Blanche</h4>
-                                <p class="text-[11px] opacity-90 italic">"Alan, digite seu texto e eu farei uma análise detalhada baseada nos critérios do ENEM."</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-[#10131a] border-r border-outline-variant/10 flex flex-col py-6 px-4 z-50 transition-transform duration-300 -translate-x-full lg:translate-x-0 shadow-[0px_24px_48px_-12px_rgba(108,92,231,0.12)]">
+    <div class="flex items-center px-2 mb-10">
+        <div class="flex items-baseline italic font-bold">
+            <span class="text-3xl font-black text-white tracking-tighter">Reda</span>
+            <span class="text-3xl font-black text-[#45EDEE] tracking-tighter">ON</span>
         </div>
     </div>
+    <nav class="flex-1 space-y-2 overflow-y-auto custom-scrollbar">
+        <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#C8C4D7] hover:text-[#E1E2EB] hover:bg-[#1d2026] transition-all duration-300 active:scale-95 transform" href="#">
+            <span class="material-symbols-outlined">home</span>
+            <span class="font-medium text-sm">Início</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#1d2026] text-[#45EDEE] border-r-4 border-[#45EDEE] transition-all duration-300 active:scale-95 transform" href="#">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+            <span class="font-medium text-sm">Nova Redação</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#C8C4D7] hover:text-[#E1E2EB] hover:bg-[#1d2026] transition-all duration-300 active:scale-95 transform" href="#">
+            <span class="material-symbols-outlined">description</span>
+            <span class="font-medium text-sm">Temas</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#C8C4D7] hover:text-[#E1E2EB] hover:bg-[#1d2026] transition-all duration-300 active:scale-95 transform" href="#">
+            <span class="material-symbols-outlined">edit_note</span>
+            <span class="font-medium text-sm">Minhas Redações</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#C8C4D7] hover:text-[#E1E2EB] hover:bg-[#1d2026] transition-all duration-300 active:scale-95 transform" href="#">
+            <span class="material-symbols-outlined">trending_up</span>
+            <span class="font-medium text-sm">Evolução</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#C8C4D7] hover:text-[#E1E2EB] hover:bg-[#1d2026] transition-all duration-300 active:scale-95 transform" href="#">
+            <span class="material-symbols-outlined">menu_book</span>
+            <span class="font-medium text-sm">Plano de Estudo</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#C8C4D7] hover:text-[#E1E2EB] hover:bg-[#1d2026] transition-all duration-300 active:scale-95 transform" href="#">
+            <span class="material-symbols-outlined">leaderboard</span>
+            <span class="font-medium text-sm">Ranking</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#C8C4D7] hover:text-[#E1E2EB] hover:bg-[#1d2026] transition-all duration-300 active:scale-95 transform" href="#">
+            <span class="material-symbols-outlined">settings</span>
+            <span class="font-medium text-sm">Configurações</span>
+        </a>
+    </nav>
+    <div class="mt-auto pt-6 border-t border-outline-variant/10">
+        <div class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-surface-container transition-colors cursor-pointer group">
+            <img alt="Alan Alves Profile Picture" class="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMp63C69DfjS6_sdQxZxZhmL_jtIgMrfgNWeUHB1L2JJq3jrwGhBpeEL-onKTCGPk4J8Hg1Wr8dQBQjzD8NXxLSI_-cmi0a_nY4-vIhkG76gQQG49Wamj5_sGj17cJevQtmM_aqnPOezlFfGIiavVP1qkuCcG8VnfOOowL40czpVFN7_O9oxo6p0s-kZuWbwO43GXA3jVPYi5Oj_1KSzOsqCTvu7YlNuIiuADJSmjCQoGw5zWvtv9TO8X6T5ufmr3NheO7fda6r1xL"/>
+            <div class="flex flex-col">
+                <span class="text-sm font-semibold text-on-surface">Alan Alves</span>
+                <span class="text-xs text-on-surface-variant">Estudante Premium</span>
+            </div>
+        </div>
+        <a class="mt-2 flex items-center gap-3 px-4 py-3 rounded-xl text-red-400/70 hover:text-red-400 hover:bg-red-500/10 transition-all duration-300 group" href="#">
+            <span class="material-symbols-outlined text-sm">logout</span>
+            <span class="font-medium text-sm">Sair</span>
+        </a>
+    </div>
+</aside>
 
-    <script type="module">
-        import { GoogleGenerativeAI } from "https://cdn.jsdelivr.net/npm/@google/generative-ai@0.1.0/+esm";
+<!-- ═══ CONTEÚDO PRINCIPAL ═══ -->
+<div class="flex-1 flex flex-col h-full relative bg-surface-container-lowest">
+    <header class="h-20 flex items-center justify-between px-6 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-40 border-b border-white/5 w-full lg:pl-64">
+        <div class="flex items-center gap-4">
+            <button class="w-10 h-10 rounded-full flex items-center justify-center text-[#E1E2EB] hover:bg-white/10 transition-colors" onclick="document.getElementById('sidebar-toggle').click()">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">edit_note</span>
+                <h2 class="text-xl font-extrabold text-on-surface tracking-tight">Nova Redação</h2>
+            </div>
+        </div>
+        <div class="flex items-center gap-4 lg:gap-6">
+            <div class="hidden sm:flex items-center gap-2 bg-surface-container px-3 py-1.5 rounded-full">
+                <span class="material-symbols-outlined text-tertiary text-lg" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+                <span class="text-xs font-bold text-on-surface">940 pts</span>
+            </div>
+            <button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors relative">
+                <span class="material-symbols-outlined">notifications</span>
+                <span class="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full border-2 border-surface"></span>
+            </button>
+        </div>
+    </header>
 
-        const API_KEY = "AIzaSyAj9B5qLu6r14dkZbrsNHWYNb9oUadamMU"; 
-        const genAI = new GoogleGenerativeAI(API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }, { apiVersion: "v1" });
+    <main class="flex-1 overflow-y-auto p-6 lg:p-10 lg:ml-64 custom-scrollbar">
+        <div class="max-w-7xl mx-auto space-y-6">
+            <div class="flex justify-center">
+                <input class="w-full max-w-4xl bg-transparent border-b border-white/10 py-2 text-xl font-bold outline-none focus:border-[#45edee] transition-colors text-white text-center" placeholder="Título da Redação: [Clique para digitar ou tema selecionado]" type="text"/>
+            </div>
+            <div class="grid grid-cols-12 gap-8 items-start">
+                <!-- Editor de texto -->
+                <div class="col-span-12 lg:col-span-8 bg-[#191c22] rounded-2xl border border-white/10 overflow-hidden flex flex-col min-h-[600px] shadow-2xl">
+                    <textarea id="textoRedacao" class="flex-1 bg-transparent p-8 text-lg outline-none resize-none text-white leading-relaxed" placeholder="Comece sua redação de elite aqui..."></textarea>
+                    <div class="p-6 bg-[#0b0e14] border-t border-white/5">
+                        <div class="flex flex-row justify-between items-center w-full gap-4">
+                            <div class="flex gap-4 text-[9px] font-bold uppercase tracking-widest flex-shrink-0">
+                                <div id="contPalavras" class="text-[#45edee]">0 PALAVRAS</div>
+                                <div id="contChars" class="text-[#c8c4d7]">0 CARACTERES</div>
+                            </div>
+                            <div class="flex gap-4 items-center">
+                                <button id="btnRevisar" class="px-6 py-2.5 rounded-xl border border-white/10 text-xs font-bold text-[#C8C4D7] hover:bg-white/5 transition-all whitespace-nowrap">Revisar</button>
+                                <button id="btnEnviar" class="px-8 py-2.5 bg-gradient-to-r from-[#6c5ce7] to-[#45edee] rounded-xl text-white text-xs font-bold shadow-lg hover:shadow-[#45edee]/20 transition-all">Enviar para Blanche</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        const textarea = document.getElementById('textoRedacao');
-        const wordCount = document.getElementById('wordCount');
-        const charCount = document.getElementById('charCount');
-        const btn = document.getElementById('btnEnviar');
+                <!-- Material de Apoio -->
+                <div class="col-span-12 lg:col-span-4 space-y-4">
+                    <h3 class="text-sm font-bold text-white uppercase tracking-widest mb-2 px-1">Material de Apoio</h3>
+                    <div class="p-4 bg-[#1d2026] rounded-xl border-l-4 border-[#6c5ce7] transition-all hover:translate-x-1 cursor-pointer group">
+                        <h4 class="font-bold text-sm text-white group-hover:text-primary transition-colors">Legislação</h4>
+                    </div>
+                    <div class="p-4 bg-[#1d2026] rounded-xl border-l-4 border-[#45edee] transition-all hover:translate-x-1 cursor-pointer group">
+                        <h4 class="font-bold text-sm text-white group-hover:text-secondary transition-colors">História</h4>
+                    </div>
+                    <div class="p-4 bg-[#1d2026] rounded-xl border-l-4 border-[#fabd00] transition-all hover:translate-x-1 cursor-pointer group">
+                        <h4 class="font-bold text-sm text-white group-hover:text-tertiary transition-colors">Especialistas</h4>
+                    </div>
+                    <div class="p-4 bg-[#1d2026] rounded-xl border-l-4 border-[#4ade80] transition-all hover:translate-x-1 cursor-pointer group">
+                        <h4 class="font-bold text-sm text-white group-hover:text-green-400 transition-colors">Atualidades</h4>
+                    </div>
+                    <div class="bg-[#6c5ce7] p-6 rounded-2xl text-white shadow-xl relative overflow-hidden mt-6">
+                        <div class="relative z-10">
+                            <h4 class="font-bold mb-2 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-lg">psychology</span>
+                                Mentor IA PROfa Blanche
+                            </h4>
+                            <p class="text-xs opacity-90 italic mb-4">"Alan, notei que sua argumentação pode ser fortalecida com um repertório sociocultural mais denso. No Plano Elite PRO, eu analiso cada linha em tempo real para você chegar aos 1000 pontos mais rápido!"</p>
+                            <div class="bg-white/10 p-3 rounded-lg text-[10px] border border-white/20 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-[14px]">bolt</span>
+                                📍 No Plano Elite PRO, eu analiso cada linha em tempo real!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</div>
 
-        // Lógica dos Contadores
-        textarea.addEventListener('input', () => {
-            const text = textarea.value.trim();
-            const words = text ? text.split(/\s+/).length : 0;
-            const chars = text.length;
-            
-            wordCount.innerText = words;
-            charCount.innerText = chars;
-        });
+<script type="module">
+  import { GoogleGenerativeAI } from "https://cdn.skypack.dev/@google/generative-ai";
 
-        // Lógica de Envio
-        btn.addEventListener('click', async () => {
-            const texto = textarea.value;
+  // 🔑 CHAVE DE API (mover para backend antes de publicar)
+  const API_KEY = "AIzaSyAj9B5qLu6r14dkZbrsNHWYNb9oUadamMU";
 
-            if (!texto) {
-                alert("Por favor, escreva sua redação antes de enviar!");
-                return;
-            }
+  const genAI = new GoogleGenerativeAI(API_KEY);
+  console.log("Sistema RedaON Iniciado com a Mestra Blanche!");
 
-            btn.innerText = "Blanche analisando...";
-            btn.disabled = true;
+  // ── CONTADOR DE PALAVRAS E CARACTERES ──────────────────────────────────────
+  const textarea = document.getElementById('textoRedacao');
+  const elPalavras = document.getElementById('contPalavras');
+  const elChars = document.getElementById('contChars');
 
-            try {
-                const prompt = "Você é a Profa Blanche, uma tutora de redação rigorosa e incentivadora. Corrija o seguinte texto do aluno Alan: " + texto;
-                const result = await model.generateContent(prompt);
-                const response = await result.response;
-                alert(response.text());
-            } catch (error) {
-                console.error(error);
-                alert("Erro: " + error.message);
-            } finally {
-                btn.innerText = "Enviar para Blanche";
-                btn.disabled = false;
-            }
-        });
-    </script>
+  textarea.addEventListener('input', () => {
+    const texto = textarea.value;
+    const palavras = texto.trim() ? texto.trim().split(/\s+/).length : 0;
+    elPalavras.textContent = palavras + ' PALAVRAS';
+    elChars.textContent = texto.length + ' CARACTERES';
+  });
+
+  // ── PAINEL DE RESULTADO ────────────────────────────────────────────────────
+  window.fecharPainel = () => {
+    document.getElementById('painel-blanche').classList.remove('aberto');
+  };
+
+  function abrirPainelLoading() {
+    document.getElementById('painel-conteudo').innerHTML = `
+      <div class="loading-blanche">
+        <div class="loading-spinner"></div>
+        <p style="color:#c8c4d7;font-size:0.9rem;">Blanche está analisando sua redação...</p>
+      </div>`;
+    document.getElementById('painel-blanche').classList.add('aberto');
+  }
+
+  function renderizarResultado(dados) {
+    const nomes = [
+      "Domínio da língua escrita",
+      "Compreensão do tema",
+      "Seleção e organização das informações",
+      "Conhecimento dos mecanismos linguísticos",
+      "Proposta de intervenção"
+    ];
+
+    const competenciasHTML = (dados.competencias || []).map((c, i) => {
+      const pct = Math.round((c.nota / 200) * 100);
+      return `
+        <div class="competencia-card">
+          <div class="competencia-header">
+            <span class="competencia-nome">C${i+1} — ${nomes[i]}</span>
+            <span class="competencia-nota">${c.nota}/200</span>
+          </div>
+          <div class="barra-bg"><div class="barra-fill" style="width:${pct}%"></div></div>
+          ${c.comentario ? `<p class="competencia-comentario">${c.comentario}</p>` : ''}
+        </div>`;
+    }).join('');
+
+    const pontosHTML = (dados.pontos_fortes || []).map(p =>
+      `<div class="lista-item"><span class="lista-item-icon" style="color:#4ade80;">✓</span><span>${p}</span></div>`
+    ).join('');
+
+    const melhorasHTML = (dados.melhorias || []).map(m =>
+      `<div class="lista-item"><span class="lista-item-icon" style="color:#fabd00;">→</span><span>${m}</span></div>`
+    ).join('');
+
+    document.getElementById('painel-conteudo').innerHTML = `
+      <div class="nota-total">
+        <div style="font-size:0.75rem;color:#928ea0;margin-bottom:0.25rem;text-transform:uppercase;letter-spacing:0.08em;">Nota Total</div>
+        <div class="nota-numero">${dados.nota_total || '—'}</div>
+        <div style="font-size:0.75rem;color:#928ea0;margin-top:0.25rem;">/1000 pontos</div>
+      </div>
+      ${competenciasHTML}
+      ${pontosHTML ? `<div class="secao-titulo">Pontos fortes</div>${pontosHTML}` : ''}
+      ${melhorasHTML ? `<div class="secao-titulo">O que melhorar</div>${melhorasHTML}` : ''}
+      ${dados.comentario_geral ? `<div class="comentario-geral">"${dados.comentario_geral}"</div>` : ''}
+    `;
+  }
+
+  function renderizarErro(msg) {
+    document.getElementById('painel-conteudo').innerHTML = `
+      <div style="text-align:center;padding:2rem;color:#928ea0;">
+        <span class="material-symbols-outlined" style="font-size:2.5rem;color:#ff6b6b;display:block;margin-bottom:1rem;">error</span>
+        <p>${msg}</p>
+      </div>`;
+  }
+
+  // ── ENVIAR PARA A BLANCHE ──────────────────────────────────────────────────
+  document.getElementById('btnEnviar').addEventListener('click', async () => {
+    const texto = textarea.value.trim();
+    const btn = document.getElementById('btnEnviar');
+
+    if (!texto) {
+      alert("Talento, escreva sua redação antes de enviar!");
+      return;
+    }
+    const palavras = texto.split(/\s+/).length;
+    if (palavras < 50) {
+      alert(`Sua redação está muito curta (${palavras} palavras). Escreva pelo menos 50 palavras antes de enviar!`);
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerText = "Blanche está analisando...";
+    abrirPainelLoading();
+
+    try {
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const prompt = `Você é a Profa. Blanche da RedaON, mentora especialista em redação ENEM.
+Avalie a redação abaixo pelas 5 competências do ENEM (nota de 0 a 200 cada).
+Responda APENAS com um JSON válido, sem texto adicional, sem markdown, no seguinte formato:
+{
+  "nota_total": <soma das 5 notas>,
+  "competencias": [
+    { "nota": <0-200>, "comentario": "<comentário breve>" },
+    { "nota": <0-200>, "comentario": "<comentário breve>" },
+    { "nota": <0-200>, "comentario": "<comentário breve>" },
+    { "nota": <0-200>, "comentario": "<comentário breve>" },
+    { "nota": <0-200>, "comentario": "<comentário breve>" }
+  ],
+  "pontos_fortes": ["<ponto 1>", "<ponto 2>", "<ponto 3>"],
+  "melhorias": ["<melhoria 1>", "<melhoria 2>", "<melhoria 3>"],
+  "comentario_geral": "<mensagem motivacional personalizada da Blanche>"
+}
+
+Redação:
+${texto}`;
+
+      const result = await model.generateContent(prompt);
+      const json = result.response.text().trim().replace(/```json|```/g, '').trim();
+      const dados = JSON.parse(json);
+      renderizarResultado(dados);
+
+    } catch (error) {
+      console.error("Erro na Blanche:", error);
+      renderizarErro("Houve um erro na conexão com a Mestra Blanche. Tente novamente.");
+    } finally {
+      btn.disabled = false;
+      btn.innerText = "Enviar para Blanche";
+    }
+  });
+
+  // ── BOTÃO REVISAR ──────────────────────────────────────────────────────────
+  document.getElementById('btnRevisar').addEventListener('click', () => {
+    if (!textarea.value.trim()) {
+      alert("Escreva algo antes de revisar!");
+      return;
+    }
+    alert("Função de revisão em breve! 🚀");
+  });
+</script>
 </body>
 </html>
